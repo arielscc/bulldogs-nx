@@ -27,6 +27,49 @@
           "mode": "production"
         }
       }
+    },
+    "storybook": {
+      "executor": "@nx/storybook:storybook",
+      "options": {
+        "port": 4400,
+        "configDir": "libs/store/merchandise/.storybook"
+      },
+      "configurations": {
+        "ci": {
+          "quiet": true
+        }
+      }
+    },
+    "build-storybook": {
+      "executor": "@nx/storybook:build",
+      "outputs": ["{options.outputDir}"],
+      "options": {
+        "outputDir": "dist/storybook/store-merchandise",
+        "configDir": "libs/store/merchandise/.storybook"
+      },
+      "configurations": {
+        "ci": {
+          "quiet": true
+        }
+      }
+    },
+    "test-storybook": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "test-storybook -c libs/store/merchandise/.storybook --url=http://localhost:4400"
+      }
+    },
+    "static-storybook": {
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "store-merchandise:build-storybook",
+        "staticFilePath": "dist/storybook/store-merchandise"
+      },
+      "configurations": {
+        "ci": {
+          "buildTarget": "store-merchandise:build-storybook:ci"
+        }
+      }
     }
   }
 }
